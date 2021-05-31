@@ -47,7 +47,7 @@ export default function Footer(props) {
               target="_blank"
               className={classes.a}
             >
-              Creative Tim
+              BiClick
             </a>
             , made with love for a better web
           </span>

@@ -26,6 +26,10 @@ import Danger from "components/Typography/Danger.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardIcon from "components/Card/CardIcon.js";
+import PeopleIcon from "@material-ui/icons/People";
+import ExtensionIcon from "@material-ui/icons/Extension";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 
@@ -34,92 +38,127 @@ import { bugs, website, server } from "variables/general.js";
 import {
   dailySalesChart,
   emailsSubscriptionChart,
-  completedTasksChart
+  completedTasksChart,
 } from "variables/charts.js";
 
 import styles from "assets/jss/material-dashboard-react/views/dashboardStyle.js";
+
+import { gql, useQuery } from "@apollo/client";
+
+const GET_USERS = gql`
+  query getUsers {
+    getUsers {
+      id
+    }
+  }
+`;
+const GET_PRODUCTS = gql`
+  query getProducts {
+    getProducts {
+      id   
+    }
+  }
+`;
+
+const ALL_ORDERS = gql`
+  query allOrders {
+    allOrders {
+      id
+      product{
+        price
+      }
+    }
+  }
+`;
 
 const useStyles = makeStyles(styles);
 
 export default function Dashboard() {
   const classes = useStyles();
+
+  const { data } = useQuery(GET_USERS);
+  const {
+   
+    data: productData,
+  } = useQuery(GET_PRODUCTS);
+  const {
+  
+    data: orderData,
+  } = useQuery(ALL_ORDERS);
+
+
+  
   return (
     <div>
       <GridContainer>
-        <GridItem xs={12} sm={6} md={3}>
+        <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="warning" stats icon>
               <CardIcon color="warning">
-                <Icon>content_copy</Icon>
+                <PeopleIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Used Space</p>
+              <p className={classes.cardCategory}>Kullanıcılar</p>
               <h3 className={classes.cardTitle}>
-                49/50 <small>GB</small>
+              {data?.getUsers.length}
               </h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Danger>
-                  <Warning />
-                </Danger>
-                <a href="#pablo" onClick={e => e.preventDefault()}>
-                  Get more space
-                </a>
+                
+                  Sistemde kayıtlı toplam kullanıcı sayısı
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
+        <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="success" stats icon>
               <CardIcon color="success">
-                <Store />
+                <ExtensionIcon />
               </CardIcon>
-              <p className={classes.cardCategory}>Revenue</p>
-              <h3 className={classes.cardTitle}>$34,245</h3>
+              <p className={classes.cardCategory}>Ürünler</p>
+              <h3 className={classes.cardTitle}>{productData?.getProducts.length}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <DateRange />
-                Last 24 Hours
+              Sistemde kayıtlı toplam ürün sayısı
               </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
+        <GridItem xs={12} sm={6} md={6}>
           <Card>
             <CardHeader color="danger" stats icon>
               <CardIcon color="danger">
-                <Icon>info_outline</Icon>
+                <ShoppingCartIcon/>
               </CardIcon>
-              <p className={classes.cardCategory}>Fixed Issues</p>
-              <h3 className={classes.cardTitle}>75</h3>
+              <p className={classes.cardCategory}>Siparişler</p>
+              <h3 className={classes.cardTitle}>{orderData?.allOrders.length}</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <LocalOffer />
-                Tracked from Github
-              </div>
+                Sistemde kayıtlı toplam sipariş sayısı
+                              </div>
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={6} md={3}>
+        <GridItem xs={12} sm={6} md={6}>
           <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <Accessibility />
+            <CardHeader color="danger" stats icon>
+              <CardIcon color="danger">
+                <MonetizationOnIcon/>
               </CardIcon>
-              <p className={classes.cardCategory}>Followers</p>
-              <h3 className={classes.cardTitle}>+245</h3>
+              <p className={classes.cardCategory}>Hasılat</p>
+              <h3 className={classes.cardTitle}>100</h3>
             </CardHeader>
             <CardFooter stats>
               <div className={classes.stats}>
-                <Update />
-                Just Updated
-              </div>
+                Sipariş edilen ürünlerin toplam fiyatı
+                              </div>
             </CardFooter>
           </Card>
         </GridItem>
+        
       </GridContainer>
       <GridContainer>
         <GridItem xs={12} sm={12} md={4}>
@@ -210,7 +249,7 @@ export default function Dashboard() {
                     tasksIndexes={[0, 1, 2, 3]}
                     tasks={bugs}
                   />
-                )
+                ),
               },
               {
                 tabName: "Website",
@@ -221,7 +260,7 @@ export default function Dashboard() {
                     tasksIndexes={[0, 1]}
                     tasks={website}
                   />
-                )
+                ),
               },
               {
                 tabName: "Server",
@@ -232,8 +271,8 @@ export default function Dashboard() {
                     tasksIndexes={[0, 1, 2]}
                     tasks={server}
                   />
-                )
-              }
+                ),
+              },
             ]}
           />
         </GridItem>
@@ -253,7 +292,7 @@ export default function Dashboard() {
                   ["1", "Dakota Rice", "$36,738", "Niger"],
                   ["2", "Minerva Hooper", "$23,789", "Curaçao"],
                   ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South"]
+                  ["4", "Philip Chaney", "$38,735", "Korea, South"],
                 ]}
               />
             </CardBody>

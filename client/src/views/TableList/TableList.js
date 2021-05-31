@@ -14,6 +14,7 @@ import { gql, useQuery } from "@apollo/client";
 const GET_USERS = gql`
   query getUsers {
     getUsers {
+      id
       firstName
       lastName
       email
@@ -33,6 +34,28 @@ const GET_PRODUCTS = gql`
       description
       price
       
+    }
+  }
+`;
+
+const ALL_ORDERS = gql`
+  query allOrders {
+    allOrders {
+      id
+      order_status
+      order_started_date
+      user {
+        id
+        firstName
+        lastName
+        username
+        adress
+      }     
+      product {
+        id
+        name
+        price
+      }
     }
   }
 `;
@@ -78,14 +101,20 @@ export default function TableList() {
     error: productError,
     data: productData,
   } = useQuery(GET_PRODUCTS);
+  const {
+    loading: orderLoading,
+    error: orderError,
+    data: orderData,
+  } = useQuery(ALL_ORDERS);
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;
 
   const usersData = data?.getUsers?.map((item) => [
-    item.username,
+    item.id,
     item.firstName,
     item.lastName,
+    item.username,
     item.email,
     item.age,
     item.city,
@@ -98,10 +127,29 @@ export default function TableList() {
   if (productError) return `Error! ${error.message}`;
 
   const productsData = productData?.getProducts?.map((item) => [
+    item.id,
     item.name,
     item.description,
     item.price,
   ]);
+
+  if (orderLoading) return "Loading...";
+  if (orderError) return `Error! ${error.message}`;
+
+  const ordersData = orderData?.allOrders?.map((item) => [
+    item.id,
+    item.order_status,
+    item.order_started_date,
+    item.user.id,
+    item.user.firstName,
+    item.user.lastName,
+    item.user.adress,
+    item.product.id,
+    item.product.name,
+    item.product.price,
+  ]);
+
+
 
   return (
     <GridContainer>
@@ -117,14 +165,15 @@ export default function TableList() {
             <Table
               tableHeaderColor="primary"
               tableHead={[
-                "First Name",
-                "Last Name",
-                "Username",
+                "Id",
+                "Adı",
+                "Soyadı",
+                "Kullanıcı Adı",
                 "Email",
-                "Age",
-                "City",
-                "Country",
-                "Address",
+                "Yaşı",
+                "Şehir",
+                "Ülke",
+                "Adresi",
               ]}
               tableData={
                 usersData
@@ -159,12 +208,57 @@ export default function TableList() {
             <Table
               tableHeaderColor="primary"
               tableHead={[
-                "Name",
-                "Description",
-                "Price",
+                "Id",
+                "Ürün Adı",
+                "Açıklama",
+                "Fiyat",
               ]}
               tableData={
                 productsData
+                /*
+                [item.username, item.lastName, item.username, item.email],
+                [item.username, item.lastName, item.username, item.email],
+                [item.username, item.lastName, item.username, item.email],*/
+              }
+            />
+
+            {/*data?.getUsers.map((item, index) => (
+            <Table 
+              tableHeaderColor="primary"
+              tableHead={["Name", "Country", "City", "Salary"]}
+              tableData={[
+                [item.email, item.email, item.email, item.email],
+                
+              ]}
+            />))*/}
+          </CardBody>
+        </Card>
+      </GridItem>
+      <GridItem xs={12} sm={12} md={12}>
+        <Card>
+          <CardHeader color="primary">
+            <h4 className={classes.cardTitleWhite}>Siparişler</h4>
+            <p className={classes.cardCategoryWhite}>
+              Sistemde kayıtlı Sipariş bilgileri
+            </p>
+          </CardHeader>
+          <CardBody>
+            <Table
+              tableHeaderColor="primary"
+              tableHead={[
+                "Id",
+                "Sipariş Durumu",
+                "Sipariş Tarihi",
+                "Alıcı Id",
+                "Alıcı Adı",
+                "Alıcı Soyadı",
+                "Alıcı Adresi",
+                "Ürün Id",
+                "Ürün Adı",
+                "Ürün Fiyatı",
+              ]}
+              tableData={
+                ordersData
                 /*
                 [item.username, item.lastName, item.username, item.email],
                 [item.username, item.lastName, item.username, item.email],

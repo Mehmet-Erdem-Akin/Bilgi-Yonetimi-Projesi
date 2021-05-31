@@ -1,7 +1,8 @@
 const { gql } = require("apollo-server");
 
-module.exports = gql`
+module.exports = gql `
   type User {
+    id: ID!
     firstName: String!
     lastName: String!
     age: String!
@@ -12,10 +13,10 @@ module.exports = gql`
     email: String!
     token: String
     createdAt: String!
-    order: [Order!]
+    order: [Order]
   }
   type Product {
-    id: Int!
+    id: ID!
     name: String!
     description: String!
     image: String
@@ -23,7 +24,7 @@ module.exports = gql`
     order: [Order!]
   }
   type Order {
-    id: Int!
+    id: ID!
     order_status: String!
     order_started_date: String!
     user: User

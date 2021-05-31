@@ -22,7 +22,6 @@ import { Router, Route, Switch, Redirect } from "react-router-dom";
 
 // core components
 import Admin from "layouts/Admin.js";
-import RTL from "layouts/RTL.js";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import LoginPage from "views/LoginPage/LoginPage.js";
@@ -35,17 +34,15 @@ import ApolloProvider from "./views/ApolloProvider";
 const hist = createBrowserHistory();
 
 ReactDOM.render(
-  <ApolloProvider >
-  <Router history={hist}>
-    <Switch>
-      <Route path="/admin" component={Admin} />
-      <Route path="/rtl" component={RTL} />
-      <Route path="/login-page" component={LoginPage} />
-      <Route path="/register-page" component={RegisterPage} />
-
-      <Redirect  to="/login-page" />
-    </Switch>
-  </Router>
+  <ApolloProvider>
+    <Router history={hist}>
+      <Switch>
+        <Route path="/admin" component={Admin} />{" "}
+        <Route path="/login-page" component={LoginPage} />{" "}
+        <Route path="/register-page" component={RegisterPage} />
+        <Redirect to="/login-page" />
+      </Switch>{" "}
+    </Router>{" "}
   </ApolloProvider>,
   document.getElementById("root")
 );
