@@ -13,6 +13,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Table from "components/Table/Table.js";
+import { Link, Redirect } from 'react-router-dom';
 
 import avatar from "assets/img/faces/marc.jpg";
 import { gql, useQuery } from "@apollo/client";
@@ -72,6 +73,8 @@ export default function productManagement() {
 
   return (
     <div>
+            {localStorage.getItem('token') == "" && <Redirect to="/" />}
+
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>

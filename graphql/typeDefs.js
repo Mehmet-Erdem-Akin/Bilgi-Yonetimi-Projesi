@@ -35,6 +35,10 @@ module.exports = gql `
     login(username: String!, password: String!): User!
     getProducts: [Product]!
     allOrders: [Order!]! 
+    myProfile: User! 
+    checkToken: User
+    getUserPublicProfile(token: String!): User! 
+
   }
   type Mutation {
     register(

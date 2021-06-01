@@ -32,6 +32,7 @@ import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
 import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
+import { Link, Redirect } from 'react-router-dom';
 
 import { bugs, website, server } from "variables/general.js";
 
@@ -192,6 +193,7 @@ export default function Dashboard() {
   
   return (
     <div>
+      {localStorage.getItem('token') == "" && <Redirect to="/" />}
       <GridContainer>
         <GridItem xs={12} sm={6} md={6}>
           <Card>

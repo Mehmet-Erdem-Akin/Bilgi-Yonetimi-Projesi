@@ -28,6 +28,7 @@ import image from "assets/img/bg7.jpg";
 
 import { gql, useLazyQuery } from "@apollo/client";
 
+
 const useStyles = makeStyles(styles);
 
 const LOGİN_USER = gql`
@@ -53,7 +54,7 @@ export default function LoginPage(props) {
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
     onCompleted(data) {
       localStorage.setItem("token", data.login.token);
-      props.history.push("/admin");
+      props.history.push("/landing-page");
     },
   });
 
@@ -75,9 +76,11 @@ export default function LoginPage(props) {
     margin: 'auto',
     marginBottom: '30px'
   };
+  
 
   return (
     <div>
+      {localStorage.setItem('token','')}
 
       <div
         className={classes.pageHeader}

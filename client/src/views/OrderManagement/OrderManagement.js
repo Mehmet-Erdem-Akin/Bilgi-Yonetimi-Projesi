@@ -14,6 +14,7 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Table from "components/Table/Table.js";
+import { Link, Redirect } from 'react-router-dom';
 
 //import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from "@material-ui/core/MenuItem";
@@ -102,6 +103,8 @@ export default function orderManagement() {
 
   return (
     <div>
+            {localStorage.getItem('token') == "" && <Redirect to="/" />}
+
       <GridContainer>
         <GridItem xs={12} sm={12} md={12}>
           <Card>

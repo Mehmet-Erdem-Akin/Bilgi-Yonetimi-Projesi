@@ -8,6 +8,8 @@ import Table from "components/Table/Table.js";
 import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
+import { Link, Redirect } from 'react-router-dom';
+
 import {
   DataGrid,
   GridToolbarContainer,
@@ -168,6 +170,8 @@ export default function TableList() {
 
   return (
     <GridContainer>
+            {localStorage.getItem('token') == "" && <Redirect to="/" />}
+
       <GridItem xs={12} sm={12} md={12}>
         <Card>
           <CardHeader color="primary">

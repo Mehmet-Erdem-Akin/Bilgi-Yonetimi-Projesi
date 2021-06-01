@@ -25,7 +25,10 @@ import Admin from "layouts/Admin.js";
 
 import "assets/css/material-dashboard-react.css?v=1.9.0";
 import LoginPage from "views/LoginPage/LoginPage.js";
+import LandingPage from "views/LandingPage/LandingPage.js";
+import LandingProfile from "views/LandingProfile/LandingProfile.js";
 import RegisterPage from "views/RegisterPage/RegisterPage.js";
+
 //import { ApolloProvider } from '@apollo/client/react';
 import ApolloProvider from "./views/ApolloProvider";
 
@@ -37,8 +40,10 @@ ReactDOM.render(
   <ApolloProvider>
     <Router history={hist}>
       <Switch>
-        <Route path="/admin" component={Admin} />{" "}
-        <Route path="/login-page" component={LoginPage} />{" "}
+        <Route path="/admin" component={Admin} />
+        <Route path="/login-page" component={LoginPage} />       
+        <Route path="/landing-page" component={LandingPage} />
+        <Route path="/profile" component={LandingProfile} />
         <Route path="/register-page" component={RegisterPage} />
         <Redirect to="/login-page" />
       </Switch>{" "}

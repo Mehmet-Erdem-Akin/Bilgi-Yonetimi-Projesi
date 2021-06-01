@@ -119,6 +119,41 @@ module.exports = {
             return orders;
 
         },
+        
+          checkToken: async (_, __, context) => {
+            const user = context.user;
+            return user;
+          },
+
+          myProfile: async (_, {}, context) => {
+            const user = await User.findOne({
+              where: { id: context.user.id },
+              include: [{
+                model: Order,
+                as: 'order', 
+               /* model: Product,
+                as: 'product', */
+                }]
+            });
+            return user;
+          },
+          getUserPublicProfile: async (_, { token }, context) => {
+            const users = await User.findOne({
+              where: {
+                token: token,
+              },
+              include: [{
+                model: Order,
+                as: 'order', 
+               /* model: Product,
+                as: 'product', */
+                }],
+            });
+            return users;
+          },
+        
+        
+        
 
 
     },
