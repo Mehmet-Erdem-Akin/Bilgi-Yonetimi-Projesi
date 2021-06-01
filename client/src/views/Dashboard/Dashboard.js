@@ -59,12 +59,59 @@ const GET_PRODUCTS = gql`
     }
   }
 `;
+const GET_USERS_2 = gql`
+  query getUsers {
+    getUsers {
+      id
+      firstName
+      lastName
+      email
+      username
+      age
+      city
+      country
+      adress
+    }
+  }
+`;
+const GET_PRODUCTS_2 = gql`
+  query getProducts {
+    getProducts {
+      id
+      name
+      description
+      price
+      
+    }
+  }
+`;
 
 const ALL_ORDERS = gql`
   query allOrders {
     allOrders {
       id
       product{
+        price
+      }
+    }
+  }
+`;
+const ALL_ORDERS_2 = gql`
+  query allOrders {
+    allOrders {
+      id
+      order_status
+      order_started_date
+      user {
+        id
+        firstName
+        lastName
+        username
+        adress
+      }     
+      product {
+        id
+        name
         price
       }
     }
@@ -86,6 +133,61 @@ export default function Dashboard() {
     data: orderData,
   } = useQuery(ALL_ORDERS);
 
+  const { loading: user2Loading,
+    error: user2Error,
+    data: user2Data, } = useQuery(GET_USERS_2);
+  const {
+    loading: product2Loading,
+    error: product2Error,
+    data: product2Data,
+  } = useQuery(GET_PRODUCTS_2);
+  const {
+    loading: order2Loading,
+    error: order2Error,
+    data: order2Data,
+  } = useQuery(ALL_ORDERS_2);
+
+  if (user2Loading) return "Loading...";
+  if (user2Error) return `Error! ${error.message}`;
+
+  const users2Data = user2Data?.getUsers?.map((item) => [
+    item.id,
+    item.firstName,
+    item.lastName,
+    item.username,
+    item.email,
+    item.age,
+    item.city,
+    item.country,
+    item.adress,
+  ]);
+
+  
+  if (product2Loading) return "Loading...";
+  if (product2Error) return `Error! ${error.message}`;
+
+  const products2Data = product2Data?.getProducts?.map((item) => [
+    item.id,
+    item.name,
+    item.description,
+    item.price,
+  ]);
+
+  if (order2Loading) return "Loading...";
+  if (order2Error) return `Error! ${error.message}`;
+
+  const orders2Data = order2Data?.allOrders?.map((item) => [
+    item.id,
+    item.order_status,
+    item.order_started_date,
+    item.user.id,
+    item.user.firstName,
+    item.user.lastName,
+    item.user.adress,
+    item.product.id,
+    item.product.name,
+    item.product.price,
+  ]);
 
   
   return (
@@ -144,8 +246,8 @@ export default function Dashboard() {
         </GridItem>
         <GridItem xs={12} sm={6} md={6}>
           <Card>
-            <CardHeader color="danger" stats icon>
-              <CardIcon color="danger">
+            <CardHeader color="info" stats icon>
+              <CardIcon color="info">
                 <MonetizationOnIcon/>
               </CardIcon>
               <p className={classes.cardCategory}>Hasılat</p>
@@ -160,144 +262,70 @@ export default function Dashboard() {
         </GridItem>
         
       </GridContainer>
+      
       <GridContainer>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="success">
-              <ChartistGraph
-                className="ct-chart"
-                data={dailySalesChart.data}
-                type="Line"
-                options={dailySalesChart.options}
-                listener={dailySalesChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Daily Sales</h4>
-              <p className={classes.cardCategory}>
-                <span className={classes.successText}>
-                  <ArrowUpward className={classes.upArrowCardCategory} /> 55%
-                </span>{" "}
-                increase in today sales.
-              </p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> updated 4 minutes ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="warning">
-              <ChartistGraph
-                className="ct-chart"
-                data={emailsSubscriptionChart.data}
-                type="Bar"
-                options={emailsSubscriptionChart.options}
-                responsiveOptions={emailsSubscriptionChart.responsiveOptions}
-                listener={emailsSubscriptionChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Email Subscriptions</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-        <GridItem xs={12} sm={12} md={4}>
-          <Card chart>
-            <CardHeader color="danger">
-              <ChartistGraph
-                className="ct-chart"
-                data={completedTasksChart.data}
-                type="Line"
-                options={completedTasksChart.options}
-                listener={completedTasksChart.animation}
-              />
-            </CardHeader>
-            <CardBody>
-              <h4 className={classes.cardTitle}>Completed Tasks</h4>
-              <p className={classes.cardCategory}>Last Campaign Performance</p>
-            </CardBody>
-            <CardFooter chart>
-              <div className={classes.stats}>
-                <AccessTime /> campaign sent 2 days ago
-              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
-      </GridContainer>
-      <GridContainer>
-        <GridItem xs={12} sm={12} md={6}>
+        <GridItem xs={12} sm={12} md={12}>
           <CustomTabs
-            title="Tasks:"
+            //title="Tasks:"
             headerColor="primary"
             tabs={[
               {
-                tabName: "Bugs",
-                tabIcon: BugReport,
+                tabName: "Kullanıcılar",
+                tabIcon: PeopleIcon,
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[0, 3]}
-                    tasksIndexes={[0, 1, 2, 3]}
-                    tasks={bugs}
-                  />
+                  <Table
+                  tableHeaderColor="primary"
+                  tableHead={["Id",
+                  "Adı",
+                  "Soyadı",
+                  "Kullanıcı Adı",
+                  "Email",
+                  "Yaşı",
+                  "Şehir",
+                  "Ülke",
+                  "Adresi",]}
+                  tableData={users2Data}
+                />
                 ),
               },
               {
-                tabName: "Website",
-                tabIcon: Code,
+                tabName: "Ürünler",
+                tabIcon: ExtensionIcon,
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[0]}
-                    tasksIndexes={[0, 1]}
-                    tasks={website}
-                  />
+                  <Table
+                  tableHeaderColor="primary"
+                  tableHead={["Id",
+                  "Ürün Adı",
+                  "Açıklama",
+                  "Fiyat",]}
+                  tableData={products2Data}
+                />
                 ),
               },
               {
-                tabName: "Server",
-                tabIcon: Cloud,
+                tabName: "Siparişler",
+                tabIcon: ShoppingCartIcon,
                 tabContent: (
-                  <Tasks
-                    checkedIndexes={[1]}
-                    tasksIndexes={[0, 1, 2]}
-                    tasks={server}
-                  />
+                  <Table
+                tableHeaderColor="primary"
+                tableHead={["Id",
+                "Sipariş Durumu",
+                "Sipariş Tarihi",
+                "Alıcı Id",
+                "Alıcı Adı",
+                "Alıcı Soyadı",
+                "Alıcı Adresi",
+                "Ürün Id",
+                "Ürün Adı",
+                "Ürün Fiyatı",]}
+                tableData={orders2Data}
+              />
                 ),
               },
             ]}
           />
         </GridItem>
-        <GridItem xs={12} sm={12} md={6}>
-          <Card>
-            <CardHeader color="warning">
-              <h4 className={classes.cardTitleWhite}>Employees Stats</h4>
-              <p className={classes.cardCategoryWhite}>
-                New employees on 15th September, 2016
-              </p>
-            </CardHeader>
-            <CardBody>
-              <Table
-                tableHeaderColor="warning"
-                tableHead={["ID", "Name", "Salary", "Country"]}
-                tableData={[
-                  ["1", "Dakota Rice", "$36,738", "Niger"],
-                  ["2", "Minerva Hooper", "$23,789", "Curaçao"],
-                  ["3", "Sage Rodriguez", "$56,142", "Netherlands"],
-                  ["4", "Philip Chaney", "$38,735", "Korea, South"],
-                ]}
-              />
-            </CardBody>
-          </Card>
-        </GridItem>
+       
       </GridContainer>
     </div>
   );

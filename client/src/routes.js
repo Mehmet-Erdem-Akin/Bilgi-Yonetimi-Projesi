@@ -27,6 +27,9 @@ import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
 import UserProfile from "views/UserProfile/UserProfile.js";
+import ProductManagement from "views/ProductManagement/ProductManagement.js";
+import OrderManagement from "views/OrderManagement/OrderManagement.js";
+
 import TableList from "views/TableList/TableList.js";
 
 const dashboardRoutes = [{
@@ -43,6 +46,22 @@ const dashboardRoutes = [{
         rtlName: "ملف تعريفي للمستخدم",
         icon: Person,
         component: UserProfile,
+        layout: "/admin"
+    },
+    {
+        path: "/product-management",
+        name: "Product Management",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: Person,
+        component: ProductManagement,
+        layout: "/admin"
+    },
+    {
+        path: "/order-management",
+        name: "Order Management",
+        rtlName: "ملف تعريفي للمستخدم",
+        icon: Person,
+        component: OrderManagement,
         layout: "/admin"
     },
     {
