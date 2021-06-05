@@ -30,6 +30,11 @@ import UserProfile from "views/UserProfile/UserProfile.js";
 import ProductManagement from "views/ProductManagement/ProductManagement.js";
 import OrderManagement from "views/OrderManagement/OrderManagement.js";
 
+import PeopleIcon from "@material-ui/icons/People";
+import ExtensionIcon from "@material-ui/icons/Extension";
+import ShoppingCartIcon from '@material-ui/icons/ShoppingCart';
+import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
+import ArrowBackIcon from '@material-ui/icons/ArrowBack';
 import TableList from "views/TableList/TableList.js";
 
 const dashboardRoutes = [{
@@ -52,7 +57,7 @@ const dashboardRoutes = [{
         path: "/product-management",
         name: "Product Management",
         rtlName: "ملف تعريفي للمستخدم",
-        icon: Person,
+        icon: ExtensionIcon,
         component: ProductManagement,
         layout: "/admin"
     },
@@ -60,7 +65,7 @@ const dashboardRoutes = [{
         path: "/order-management",
         name: "Order Management",
         rtlName: "ملف تعريفي للمستخدم",
-        icon: Person,
+        icon: ShoppingCartIcon,
         component: OrderManagement,
         layout: "/admin"
     },
@@ -72,6 +77,14 @@ const dashboardRoutes = [{
         component: TableList,
         layout: "/admin"
     },
+    {
+        path: "/landing-page",
+        name: "Sipariş Sayfasına Dön",
+        icon: ArrowBackIcon,
+        layout: "",
+        to: "/landing-page"
+    },
+    
    
     
     

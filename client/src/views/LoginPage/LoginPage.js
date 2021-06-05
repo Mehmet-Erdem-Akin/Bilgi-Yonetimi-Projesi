@@ -34,6 +34,7 @@ const useStyles = makeStyles(styles);
 const LOGİN_USER = gql`
   query login($username: String!, $password: String!) {
     login(username: $username, password: $password) {
+      id
       username
       email
       createdAt
@@ -54,6 +55,7 @@ export default function LoginPage(props) {
     onError: (err) => setErrors(err.graphQLErrors[0].extensions.errors),
     onCompleted(data) {
       localStorage.setItem("token", data.login.token);
+      localStorage.setItem("id", data.login.id);
       props.history.push("/landing-page");
     },
   });

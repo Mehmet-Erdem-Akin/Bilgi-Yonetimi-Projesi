@@ -19,7 +19,7 @@ module.exports = gql `
     id: ID!
     name: String!
     description: String!
-    image: String
+    image: String!
     price: String!
     order: [Order!]
   }
@@ -37,8 +37,7 @@ module.exports = gql `
     allOrders: [Order!]! 
     myProfile: User! 
     checkToken: User
-    getUserPublicProfile(token: String!): User! 
-
+    getUserPublicProfile(id: ID!): User! 
   }
   type Mutation {
     register(
@@ -57,7 +56,6 @@ module.exports = gql `
     createProduct(
       name: String!
       description: String!
-      image: String!
       price: String!
     ):Product!
 

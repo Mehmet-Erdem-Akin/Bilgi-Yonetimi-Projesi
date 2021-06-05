@@ -5,6 +5,7 @@ const teamStyle = {
   section: {
     padding: "70px 0",
     textAlign: "center",
+    
   },
   title: {
     ...title,
@@ -18,12 +19,25 @@ const teamStyle = {
     marginLeft: "auto",
     marginRight: "auto",
   },
-  cardTitle,
+  cardTitle:{
+    margin: "0",
+        color: "#000",
+            fontWeight: "bold",
+            fontSize: "26px"
+
+  },
   smallTitle: {
-    color: "#6c757d",
+    color: "#9C27B0",
+    fontWeight: "bold"
+  },
+  card: {
+    paddingTop: "10px",
+    backgroundColor: "#f3f3f3",
+    border: "2px solid #ccc",
   },
   description: {
-    color: "#999",
+    color: "#000",
+    margin: "0"
   },
   justifyCenter: {
     justifyContent: "center !important",

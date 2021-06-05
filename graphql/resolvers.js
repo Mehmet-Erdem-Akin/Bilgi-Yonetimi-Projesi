@@ -29,7 +29,8 @@ module.exports = {
                     {
                         include: [{
                             model: Order, 
-                            as: 'order'
+                            as: 'order',
+                            include: [{model: Product,as: 'product'}]
                         }]
                     }
                 );
@@ -82,10 +83,12 @@ module.exports = {
                 const token = jwt.sign({ username }, JWT_SECRET, { expiresIn: 60 * 60 });
 
                 user.token = token;
+                myId= user.id;
                 return {
                     ...user.toJSON(),
                     createdAt: user.createdAt.toISOString(),
                     token,
+                    myId,
                 }
             } catch (err) {
                 console.log(err)
@@ -137,20 +140,20 @@ module.exports = {
             });
             return user;
           },
-          getUserPublicProfile: async (_, { token }, context) => {
+          getUserPublicProfile: async (_, { id }, context) => {
             const users = await User.findOne({
               where: {
-                token: token,
+                id: id,
               },
               include: [{
                 model: Order,
                 as: 'order', 
-               /* model: Product,
-                as: 'product', */
+                include: [{model: Product,as: 'product'}]
                 }],
             });
             return users;
           },
+          
         
         
         
@@ -207,8 +210,8 @@ module.exports = {
             }
 
         },
-        createProduct: async(_, args) => {
-            let { name, description, price, image } = args
+        createProduct: async (_, args) => {
+            let { name, description, price, /*image*/ } = args
             let errors = {}
             try {
 
@@ -216,7 +219,7 @@ module.exports = {
                     name,
                     description,
                     price,
-                    image
+                    //image
                 })
                 return product
 

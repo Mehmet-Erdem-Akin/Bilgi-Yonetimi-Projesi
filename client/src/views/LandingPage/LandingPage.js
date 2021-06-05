@@ -22,6 +22,9 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 import ProductSection from "./Sections/ProductSection.js";
 import TeamSection from "./Sections/TeamSection.js";
 import WorkSection from "./Sections/WorkSection.js";
+import { gql, useQuery, } from "@apollo/client";
+
+
 
 const dashboardRoutes = [];
 
@@ -30,6 +33,8 @@ const useStyles = makeStyles(styles);
 export default function LandingPage(props) {
   const classes = useStyles();
   const { ...rest } = props;
+
+
   return (
     <div>
       {localStorage.getItem('token') == "" && <Redirect to="/" />}
