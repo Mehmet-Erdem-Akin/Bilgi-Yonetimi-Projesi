@@ -47,7 +47,7 @@ const MY_PROFİLE = gql`
     }
   }
 `;
-
+/*
 const ALL_ORDERS = gql`
   query allOrders {
     allOrders {
@@ -68,7 +68,7 @@ const ALL_ORDERS = gql`
       }
     }
   }
-`;
+`;*/
 const dashboardRoutes = [];
 
 /*const styles = {
@@ -114,7 +114,7 @@ export default function LandingProfile(props) {
   if (orderError) return `Error! ${error.message}`;*/
   if (profileLoading) return "Loading...";
 
-  const ordersData = profileData.getUserPublicProfile.order.map((item) => [
+  const ordersData = profileData?.getUserPublicProfile?.order?.map((item) => [
     item.id,
     item.order_status,
     new Date(item.order_started_date *1).toLocaleString(),
@@ -122,7 +122,7 @@ export default function LandingProfile(props) {
     item.product.price,
   ]);
 
-  console.log(profileData.getUserPublicProfile);
+  //console.log(profileData.getUserPublicProfile);
 
 
 

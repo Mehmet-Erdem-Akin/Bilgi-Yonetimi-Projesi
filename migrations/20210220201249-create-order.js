@@ -15,6 +15,7 @@ module.exports = {
         unique: false
       },
       order_started_date: {
+        
         type: Sequelize.DATE,
       },
       productId: {
