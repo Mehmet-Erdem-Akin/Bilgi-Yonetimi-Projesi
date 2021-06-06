@@ -240,6 +240,7 @@ module.exports = {
             /*let order = await Order.findOne({
                 where: { userId: user.id, productId: product.id },
               })*/
+              
 
             const order = await Order.create({
                 userId,
