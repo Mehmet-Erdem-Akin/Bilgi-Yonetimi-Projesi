@@ -15,8 +15,10 @@ import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Table from "components/Table/Table.js";
 import { Link, Redirect } from 'react-router-dom';
+import { jsPDF } from "jspdf";
+//import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable'
 
-//import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
@@ -132,6 +134,46 @@ export default function orderManagement() {
     }
   };
 
+  const pdf = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Sipariş Durumu",
+        "Sipariş Tarihi",
+        "Alıcı Id",
+        "Alıcı Adı",
+        "Alıcı Soyadı",
+        "Alıcı Adresi",
+        "Ürün Id",
+        "Ürün Adı",
+        "Ürün Fiyatı",
+      ]],
+      body: 
+        ordersData
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+/*
+    const doc = new jsPDF();
+    //const { jsPDF } = require("jspdf");
+    doc.text("Hello world!", 10, 10);
+    doc.save("a4.pdf");*/
+  };
+  
+  
+
   return (
     <div>
             {localStorage.getItem('token') == "" && <Redirect to="/" />}
@@ -194,7 +236,8 @@ export default function orderManagement() {
             </p>
           </CardHeader>
           <CardBody>
-            <Table
+            <Button onClick={pdf}></Button>
+            <Table id="orderTable"
               tableHeaderColor="primary"
               tableHead={[
                 "Id",

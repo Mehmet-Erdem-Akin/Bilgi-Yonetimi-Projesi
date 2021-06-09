@@ -66,8 +66,8 @@ module.exports = gql `
       order_started_date: String!
     ):Order!
 
-    editOrder(order_status: String! 
-      orderId: Int!  
-    ):Order
+    editOrder(order_status: String!
+      orderId: Int!
+    ):[Order!]!
   }
 `;
