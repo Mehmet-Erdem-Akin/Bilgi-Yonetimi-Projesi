@@ -17,6 +17,10 @@ import CardFooter from "components/Card/CardFooter.js";
 import { Field, Form, Formik } from 'formik';
 import TextField from '@material-ui/core/TextField';
 import styles from "assets/jss/material-kit-react/views/landingPageSections/teamStyle.js";
+import AddAlert from "@material-ui/icons/AddAlert";
+//core components
+import Snackbar from "components/Snackbar/Snackbar.js";
+import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 
 import team1 from "assets/img/faces/default.jpg";
 import { gql, useQuery, useMutation} from "@apollo/client";
@@ -67,9 +71,10 @@ const useStyles = makeStyles(styles);
 
 export default function TeamSection() {
   const classes = useStyles();
-  const [open, setOpen] = React.useState(false);
+  //const [open, setOpen] = React.useState(false);
   const [adet, adediAta] = useState();
-
+  const [open, setOpen] = React.useState(false);
+  //const [place, setPlace] = React.useState("tl");
   
   const imageClasses = classNames(
     classes.imgRaised,
@@ -85,8 +90,8 @@ export default function TeamSection() {
   } = useQuery(GET_PRODUCTS);
 
   
-  if (productLoading) return "Loading...";
-  if (productError) return `Error! ${error.message}`;
+  //if (productLoading) return "Loading...";
+  //if (productError) return `Error! ${error.message}`;
 
   const initialValues = {
     order_status: 'sipariş alındı',
@@ -111,8 +116,10 @@ export default function TeamSection() {
         userId: parseInt(userId) || '',
         productId: parseInt(adet) || '',
       },
-    });      
-
+      
+    });    
+    alert('1');
+    
     if (error) {
       console.log(error);
       alert('Lütfen tekrar deneyin!');
@@ -120,7 +127,15 @@ export default function TeamSection() {
       setOpen(false);
     }
     setSubmitting(false);
+
   };
+
+  const showNotification = () => {
+    setOpen(true);
+    setTimeout(function() {
+      setOpen(false);
+    }, 6000);
+  }
   
   //console.log(document.getElementById().innerHTML)
   /*async function handleOrder() {
@@ -144,7 +159,8 @@ export default function TeamSection() {
     <div className={classes.section}>
       
       <h2 className={classes.title}>Ürünlerimiz</h2>
-      <div>
+      <div>      
+
       <Formik  initialValues={initialValues}   onSubmit={submitFunction}>
          {(formik) => (
            <Form>
@@ -160,7 +176,7 @@ export default function TeamSection() {
                   className={imageClasses}
                 />
               </GridItem>
-              <span className={classes.description} id={item.id} name='itemId'>{item.id}</span>
+              {/* <span className={classes.description} id={item.id} name='itemId'>{item.id}</span> */}
 
               <h4 style={{textTransform: 'uppercase'}} className={classes.cardTitle}>
                 {item.name}
@@ -183,12 +199,21 @@ export default function TeamSection() {
                   //onClick={submitFunction}
                   type="submit" disabled={formik.isSubmitting}
                   name="btn"
-                  onClick={() => adediAta(item.id)}
+                  onClick={() => (adediAta(item.id), showNotification())}
                 >
                   Getir
                 </Button>
               </CardFooter>
             </Card>
+            <Snackbar
+              place="bc"
+              color="success"
+              icon={AddAlert}
+              message="Siparişiniz Alınmıştır. En Yakın Zamanda Hazırlanacaktır."
+              open={open}
+              closeNotification={() => setOpen(false)}
+              close
+            />
           </GridItem>
          
         )

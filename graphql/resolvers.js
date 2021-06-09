@@ -251,6 +251,31 @@ module.exports = {
             return order
 
         },
+        editOrder: async(_, args) => {
+            let { orderId, order_status } = args
+            let errors = {}
+            const edit = await Order.update({order_status: order_status},{
+                where: {
+                    id: orderId
+                }
+            })
+            /*let order = await Order.findOne({
+                where: { userId: user.id, productId: product.id },
+              })*/
+              
+              /*const order = await Order.findOne({
+                where: {
+                  id: orderId,
+                },
+                
+              });
+              
+              order.order_status = order_status;
+             order = await Order.save()*/
+
+            return edit
+
+        },
         /*createOrder: async (_, args) => {
             let { order_status, order_started_date} = args
             let errors = {}

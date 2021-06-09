@@ -20,10 +20,22 @@ import { Link, Redirect } from 'react-router-dom';
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
-
 import avatar from "assets/img/faces/marc.jpg";
-import { gql, useQuery } from "@apollo/client";
+import { gql, useQuery , useMutation} from "@apollo/client";
 
+const EDİT_ORDER = gql`
+  mutation editOrder(
+    $orderId: Int!
+    $order_status: String!    
+  ) {
+    editOrder(
+      orderId: $orderId
+      order_status: $order_status    
+    ){
+      order_status
+    }
+  }
+`;
 
 
 const ALL_ORDERS = gql`
@@ -79,6 +91,10 @@ export default function orderManagement() {
     setAge(event.target.value);
   };
 
+  const [editOrder] = useMutation(EDİT_ORDER, {
+    refetchQueries: [{ query: ALL_ORDERS }],
+  });
+   
   const {
     loading: orderLoading,
     error: orderError,
@@ -100,6 +116,21 @@ export default function orderManagement() {
     item.product.name,
     item.product.price,
   ]);
+
+  const submitFunction = async (values) => {
+    const { error, data } =await editOrder({
+      variables: {
+        orderId: 2 || '',
+        order_status: age || '',
+      },
+    });
+    if (error) {
+      console.log(error);
+      alert('Lütfen tekrar deneyin!');
+    } else {
+      setOpen(false);
+    }
+  };
 
   return (
     <div>
@@ -139,17 +170,18 @@ export default function orderManagement() {
                       id="order_status-select"
                       value={age}
                       onChange={handleChange}
+                      name="select"
                     >
-                      <MenuItem value={"Hazırlanıyor"}>Hazırlanıyor</MenuItem>
-                      <MenuItem value={"Kargoya Verildi"}>Kargoya Verildi</MenuItem>
-                      <MenuItem value={"30"}>Teslim Edildi</MenuItem>
+                      <MenuItem value={"Sipariş Hazırlanıyor"}>Sipariş Hazırlanıyor</MenuItem>
+                      <MenuItem value={"Sipariş Kargoya Verildi"}>Sipariş Kargoya Verildi</MenuItem>
+                      <MenuItem value={"Sipariş Teslim Edildi"}>Sipariş Teslim Edildi</MenuItem>
                     </Select>
                   </FormControl>
                 </GridItem>
               </GridContainer>
             </CardBody>
             <CardFooter>
-              <Button color="primary">Güncelle</Button>
+              <Button onClick={submitFunction} color="primary">Güncelle</Button>
             </CardFooter>
           </Card>
         </GridItem>
