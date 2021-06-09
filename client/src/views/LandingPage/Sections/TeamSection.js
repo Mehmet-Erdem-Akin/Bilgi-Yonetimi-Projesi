@@ -106,7 +106,12 @@ export default function TeamSection() {
   });
 
   var userId = localStorage.getItem('id');
-
+  const showNotification = () => {
+    setOpen(true);
+    setTimeout(function() {
+      setOpen(false);
+    }, 6000);
+  }
   const submitFunction = async (values,{ setSubmitting }) => {
     const { error, data } = await createOrder({
       variables: {
@@ -117,25 +122,17 @@ export default function TeamSection() {
         productId: parseInt(adet) || '',
       },
       
-    });    
-    alert('1');
+    }); 
     
     if (error) {
       console.log(error);
       alert('Lütfen tekrar deneyin!');
-    } else {
-      setOpen(false);
-    }
+    } 
     setSubmitting(false);
 
   };
 
-  const showNotification = () => {
-    setOpen(true);
-    setTimeout(function() {
-      setOpen(false);
-    }, 6000);
-  }
+  
   
   //console.log(document.getElementById().innerHTML)
   /*async function handleOrder() {

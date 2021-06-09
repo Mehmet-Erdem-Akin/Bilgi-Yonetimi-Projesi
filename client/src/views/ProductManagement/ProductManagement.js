@@ -16,7 +16,9 @@ import Table from "components/Table/Table.js";
 import { Link, Redirect } from 'react-router-dom';
 import { Field, Form, Formik } from 'formik';
 import TextField from '@material-ui/core/TextField';
-
+import AddAlert from "@material-ui/icons/AddAlert";
+//core components
+import Snackbar from "components/Snackbar/Snackbar.js";
 import avatar from "assets/img/faces/default.jpg";
 import { gql, useQuery , useMutation} from "@apollo/client";
 
@@ -91,7 +93,8 @@ const useStyles = makeStyles(styles);
 
 export default function productManagement() {
   const classes = useStyles();
-
+  //const [open, setOpen] = React.useState(false);
+  const [adet, adediAta] = useState();
   const [open, setOpen] = React.useState(false);
 
   const [createProduct] = useMutation(CREATE_PRODUCT, {
@@ -133,14 +136,19 @@ export default function productManagement() {
        
       },
     });
+    
     if (error) {
       console.log(error);
       alert('Lütfen tekrar deneyin!');
-    } else {
-      setOpen(false);
-    }
+    } 
     setSubmitting(false);
   };
+  const showNotification = () => {
+    setOpen(true);
+    setTimeout(function() {
+      setOpen(false);
+    }, 6000);
+  }
 
   return (
     <div>
@@ -218,9 +226,18 @@ export default function productManagement() {
               
             </CardBody>
             <CardFooter>
-              <Button color="primary"  type="submit" disabled={formik.isSubmitting}>Ekle</Button>
+              <Button color="primary" onClick={() => showNotification()}  type="submit" disabled={formik.isSubmitting}>Ekle</Button>
             </CardFooter>
           </Card>
+          <Snackbar
+              place="bc"
+              color="success"
+              icon={AddAlert}
+              message="Ürün Başarıyla Kaydedilmiştir."
+              open={open}
+              closeNotification={() => setOpen(false)}
+              close
+            />
         </GridItem>
        </Form>
          )}
@@ -252,6 +269,7 @@ export default function productManagement() {
            
           </CardBody>
         </Card>
+       
       </GridItem>
        
       </GridContainer>
