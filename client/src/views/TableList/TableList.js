@@ -9,6 +9,10 @@ import Card from "components/Card/Card.js";
 import CardHeader from "components/Card/CardHeader.js";
 import CardBody from "components/Card/CardBody.js";
 import { Link, Redirect } from 'react-router-dom';
+import { jsPDF } from "jspdf";
+//import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
+import Button from "components/CustomButtons/Button.js";
 
 import {
   DataGrid,
@@ -166,7 +170,95 @@ export default function TableList() {
     item.product.price,
   ]);
 
+  const pdf = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Adı",
+        "Soyadı",
+        "Kullanıcı Adı",
+        "Email",
+        "Yaşı",
+        "Şehir",
+        "Ülke",
+        "Adresi",
+      ]],
+      body: 
+      usersData
+      
 
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
+  const pdf2 = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Ürün Adı",
+        "Açıklama",
+        "Fiyat",
+      ]],
+      body: 
+      productsData
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
+  const pdf3 = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Sipariş Durumu",
+        "Sipariş Tarihi",
+        "Alıcı Id",
+        "Alıcı Adı",
+        "Alıcı Soyadı",
+        "Alıcı Adresi",
+        "Ürün Id",
+        "Ürün Adı",
+        "Ürün Fiyatı",
+      ]],
+      body: 
+      ordersData
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
 
   return (
     <GridContainer>
@@ -181,6 +273,8 @@ export default function TableList() {
             </p>
           </CardHeader>
           <CardBody>
+            <Button onClick={pdf}>Verileri İndir</Button>
+
             <Table
             
               tableHeaderColor="primary"
@@ -214,6 +308,8 @@ export default function TableList() {
             </p>
           </CardHeader>
           <CardBody>
+          <Button onClick={pdf2}>Verileri İndir</Button>
+
             <Table
               tableHeaderColor="primary"
               tableHead={[
@@ -241,6 +337,8 @@ export default function TableList() {
             </p>
           </CardHeader>
           <CardBody>
+          <Button onClick={pdf3}>Verileri İndir</Button>
+
             <Table
               tableHeaderColor="primary"
               tableHead={[

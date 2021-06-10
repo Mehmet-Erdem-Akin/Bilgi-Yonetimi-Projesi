@@ -22,6 +22,10 @@ import Snackbar from "components/Snackbar/Snackbar.js";
 import avatar from "assets/img/faces/default.jpg";
 import { gql, useQuery , useMutation} from "@apollo/client";
 
+import { jsPDF } from "jspdf";
+//import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
+
 const CREATE_PRODUCT = gql`
   mutation createProduct(
     $name: String!
@@ -150,6 +154,38 @@ export default function productManagement() {
     }, 6000);
   }
 
+  const pdf = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Ürün Adı",
+        "Açıklama",
+        "Fiyat",
+      ]],
+      body: 
+        productsData
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+/*
+    const doc = new jsPDF();
+    //const { jsPDF } = require("jspdf");
+    doc.text("Hello world!", 10, 10);
+    doc.save("a4.pdf");*/
+  };
+
   return (
     <div>
             {localStorage.getItem('token') == "" && <Redirect to="/" />}
@@ -252,6 +288,8 @@ export default function productManagement() {
             </p>
           </CardHeader>
           <CardBody>
+          <Button onClick={pdf}>Verileri İndir</Button>
+
             <Table
               tableHeaderColor="primary"
               tableHead={[

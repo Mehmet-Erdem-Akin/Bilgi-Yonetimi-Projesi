@@ -17,7 +17,7 @@ import Table from "components/Table/Table.js";
 import { Link, Redirect } from 'react-router-dom';
 import { jsPDF } from "jspdf";
 //import 'jspdf-autotable';
-import autoTable from 'jspdf-autotable'
+import autoTable from 'jspdf-autotable';
 
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
@@ -142,7 +142,7 @@ export default function orderManagement() {
     var res = doc.autoTableHtmlToJson(elem);
     doc.autoTable(res.columns, res.data);
     doc.save("table.pdf");*/
-    doc.autoTable( { html: '#orderTable' })
+    //doc.autoTable( { html: '#orderTable' })
     doc.autoTable({
       head: [[
         "Id",
@@ -236,7 +236,7 @@ export default function orderManagement() {
             </p>
           </CardHeader>
           <CardBody>
-            <Button onClick={pdf}></Button>
+            <Button onClick={pdf}>Verileri İndir</Button>
             <Table id="orderTable"
               tableHeaderColor="primary"
               tableHead={[

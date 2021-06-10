@@ -33,8 +33,11 @@ import MonetizationOnIcon from '@material-ui/icons/MonetizationOn';
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import { Link, Redirect } from 'react-router-dom';
-
 import { bugs, website, server } from "variables/general.js";
+import { jsPDF } from "jspdf";
+//import 'jspdf-autotable';
+import autoTable from 'jspdf-autotable';
+import Button from "components/CustomButtons/Button.js";
 
 import {
   dailySalesChart,
@@ -190,7 +193,99 @@ export default function Dashboard() {
     item.product.price,
   ]);
 
-  
+  const pdf = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Adı",
+        "Soyadı",
+        "Kullanıcı Adı",
+        "Email",
+        "Yaşı",
+        "Şehir",
+        "Ülke",
+        "Adresi",
+      ]],
+      body: 
+      users2Data
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
+  const pdf2 = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Adı",
+        "Soyadı",
+        "Kullanıcı Adı",
+        "Email",
+        "Yaşı",
+        "Şehir",
+        "Ülke",
+        "Adresi",
+      ]],
+      body: 
+      products2Data
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
+  const pdf3 = () => {
+    var doc = new jsPDF('l', 'mm', [500, 310]);
+    /*doc.autoTable({ html: '#orderTable' })
+    doc.save('table.pdf')*/
+    /*var elem = document.getElementById("orderTable");
+    var res = doc.autoTableHtmlToJson(elem);
+    doc.autoTable(res.columns, res.data);
+    doc.save("table.pdf");*/
+    //doc.autoTable( { html: '#orderTable' })
+    doc.autoTable({
+      head: [[
+        "Id",
+        "Adı",
+        "Soyadı",
+        "Kullanıcı Adı",
+        "Email",
+        "Yaşı",
+        "Şehir",
+        "Ülke",
+        "Adresi",
+      ]],
+      body: 
+      orders2Data
+      
+
+    })
+    doc.setFont("times");
+
+    doc.save('table.pdf')
+
+  };
   return (
     <div>
       {localStorage.getItem('token') == "" && <Redirect to="/" />}
@@ -275,6 +370,7 @@ export default function Dashboard() {
                 tabName: "Kullanıcılar",
                 tabIcon: PeopleIcon,
                 tabContent: (
+                  
                   <Table
                   tableHeaderColor="primary"
                   tableHead={["Id",
