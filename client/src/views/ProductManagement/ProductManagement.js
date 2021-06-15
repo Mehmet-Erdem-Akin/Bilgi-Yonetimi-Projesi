@@ -182,16 +182,40 @@ export default function productManagement() {
   };
 
   const names = [
-    'elma',
-    'armut',
-    'muz',
-    'ananas',
-    'çilek',
-    'kiraz',
-    'avakado',
-    'karpuz',
-    'portakal',
-    'diger',
+    {
+      name: 'elma', link: 'http://www.entazem.com/Uploads/UrunResimleri/buyuk/elma-kirmizi-yaz-f85f.jpg'
+    },
+    {
+      name: 'muz', link: 'http://www.sebzemeyvedunyasi.com/Uploads/UrunResimleri/buyuk/Muz-Chiquita-46af.png'
+    },
+    {
+      name: 'cilek', link: 'https://img.pixers.pics/pho_wat(s3:700/FO/48/70/06/60/700_FO48700660_0051fb153cf2e07cae5e2ed337670fc6.jpg,700,699,cms:2018/10/5bd1b6b8d04b8_220x50-watermark.png,over,481,650,jpg)/duvar-resimleri-cilek.jpg.jpg'
+    },
+    {
+      name: 'armut', link: 'https://www.verita.com.tr/wp-content/uploads/2014/08/armut.jpg'
+    },
+    {
+      name: 'erik', link: 'http://www.greenada.com/Uploads/UrunResimleri/buyuk/greenadacan-erigi-5855.jpg'
+    },
+    {
+      name: 'ananas', link: 'https://st1.myideasoft.com/idea/ek/90/myassets/products/030/adet-ananas-2135193.jpg?revision=1553251744'
+    },
+    {
+      name: 'portakal', link: 'http://www.canfreshfruits.com.tr/wp-content/uploads/2019/02/portakal-300x300.jpg'
+    },
+    {
+      name: 'karpuz', link: 'https://www.risalehaber.com/d/other/karpuz2.jpg'
+    },
+    {
+      name: 'kiraz', link: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTvsombPxMzw2hYq_hUTuFklouNjvDM4dynqPetHzmFGiXYSbQne7qydBVjRCTWW6NWeAk&usqp=CAU'
+    },
+    {
+      name: 'mango', link: 'https://st.depositphotos.com/1642482/3698/i/950/depositphotos_36983317-stock-photo-mango.jpg'
+    },
+    {
+      name: 'diger', link: 'https://www.aksismarket.com/assets/corals/images/default_product_image.png'
+    },
+    
   ];
 
   return (
@@ -265,8 +289,8 @@ export default function productManagement() {
                             value={age}
                             onChange={handleChange}
                           >
-                            {names.map((name) => (
-                             <MenuItem value={name}>{name}</MenuItem>
+                            {names.map((item) => (
+                             <MenuItem value={item.link}>{item.name}</MenuItem>
                              ))}
                             
                           </Select>

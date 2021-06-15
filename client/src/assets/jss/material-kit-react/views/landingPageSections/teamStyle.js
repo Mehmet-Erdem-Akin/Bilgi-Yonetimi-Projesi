@@ -32,7 +32,7 @@ const teamStyle = {
   },
   card: {
     paddingTop: "10px",
-    backgroundColor: "#f3f3f3",
+    backgroundColor: "#fff",
     border: "2px solid #ccc",
   },
   description: {

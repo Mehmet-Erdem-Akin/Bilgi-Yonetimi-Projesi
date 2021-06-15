@@ -23,6 +23,7 @@ import Snackbar from "components/Snackbar/Snackbar.js";
 import SnackbarContent from "components/Snackbar/SnackbarContent.js";
 
 import team1 from "assets/img/faces/default.jpg";
+import karpuz from "assets/img/karpuz.png";
 import { gql, useQuery, useMutation} from "@apollo/client";
 
 const GET_PRODUCTS = gql`
@@ -32,7 +33,7 @@ const GET_PRODUCTS = gql`
       name
       description
       price
-      
+      image
     }
   }
 `;
@@ -61,6 +62,7 @@ const CREATE_ORDER = gql`
         name
         description
         price
+        
       }
     }
   }
@@ -151,13 +153,13 @@ export default function TeamSection() {
     item.price,
   ]);*/
 
+  var image;
 
   return (
     <div className={classes.section}>
-      
       <h2 className={classes.title}>Ürünlerimiz</h2>
       <div>      
-
+      
       <Formik  initialValues={initialValues}   onSubmit={submitFunction}>
          {(formik) => (
            <Form>
@@ -165,10 +167,10 @@ export default function TeamSection() {
         {productData?.getProducts?.map((item,index) =>(
           <GridItem xs={12} sm={12} md={4} key={index}>
             <Card className={classes.card} plain>
-              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>
+              <GridItem xs={12} sm={12} md={6} className={classes.itemGrid}>               
                 <img
-                  style={{ marginLeft: "90px", border: "8px solid white" }}
-                  src={team1}
+                  style={{ marginLeft: "80px", border: "8px solid white", width:"150px", height: "150px" }}
+                  src={item.image}
                   alt="..."
                   className={imageClasses}
                 />
@@ -198,7 +200,7 @@ export default function TeamSection() {
                   name="btn"
                   onClick={() => (adediAta(item.id), showNotification())}
                 >
-                  Getir
+                  İste
                 </Button>
               </CardFooter>
             </Card>
