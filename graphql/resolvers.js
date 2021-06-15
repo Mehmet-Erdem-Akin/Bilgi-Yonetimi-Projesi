@@ -248,7 +248,7 @@ module.exports = {
                 order_status,
                 order_started_date
             })
-            return order
+            return order;
 
         },
         editOrder: async(_, args) => {

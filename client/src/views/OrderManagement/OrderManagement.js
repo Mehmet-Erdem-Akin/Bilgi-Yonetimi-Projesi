@@ -1,4 +1,4 @@
-import React,{ useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 
@@ -14,31 +14,27 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Table from "components/Table/Table.js";
-import { Link, Redirect } from 'react-router-dom';
+import { Link, Redirect } from "react-router-dom";
 import { jsPDF } from "jspdf";
 //import 'jspdf-autotable';
-import autoTable from 'jspdf-autotable';
+import autoTable from "jspdf-autotable";
+import { Field, Form, Formik } from "formik";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import FormControl from "@material-ui/core/FormControl";
 import Select from "@material-ui/core/Select";
 import avatar from "assets/img/faces/marc.jpg";
-import { gql, useQuery , useMutation} from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 
 const EDİT_ORDER = gql`
-  mutation editOrder(
-    $orderId: Int!
-    $order_status: String!    
-  ) {
-    editOrder(
-      orderId: $orderId
-      order_status: $order_status    
-    ){
-      order_status
+  mutation editOrder($orderId: Int!, $order_status: String!) {
+    editOrder(orderId: $orderId, order_status: $order_status) {
+      user {
+        id
+      }
     }
   }
 `;
-
 
 const ALL_ORDERS = gql`
   query allOrders {
@@ -52,7 +48,7 @@ const ALL_ORDERS = gql`
         lastName
         username
         adress
-      }     
+      }
       product {
         id
         name
@@ -61,7 +57,6 @@ const ALL_ORDERS = gql`
     }
   }
 `;
-
 
 const styles = {
   cardCategoryWhite: {
@@ -80,23 +75,38 @@ const styles = {
     marginBottom: "3px",
     textDecoration: "none",
   },
-  
+  name: {
+    marginTop: "10px",
+    marginBottom: "25px",
+    width: "99%",
+    //padding: '10px',
+    border: "1px solid #ccc",
+    borderRadius: "2px",
+    fontSize: "14px",
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontWeight: "400",
+    height: "35px",
+  },
 };
 const useStyles = makeStyles(styles);
 
 export default function orderManagement() {
   const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
 
   const [age, setAge] = React.useState("");
 
   const handleChange = (event) => {
     setAge(event.target.value);
   };
-
+  const initialValues = {
+    orderId: "",
+    order_status: "",
+  };
   const [editOrder] = useMutation(EDİT_ORDER, {
     refetchQueries: [{ query: ALL_ORDERS }],
   });
-   
+
   const {
     loading: orderLoading,
     error: orderError,
@@ -119,23 +129,28 @@ export default function orderManagement() {
     item.product.price,
   ]);
 
-  const submitFunction = async (values) => {
-    const { error, data } =await editOrder({
+  const submitFunction = async (values, { setSubmitting }) => {
+    const { error, data } = await editOrder({
       variables: {
-        orderId: 2 || '',
-        order_status: age || '',
+        orderId: parseInt(values.name) || "",
+        order_status: age || "",
       },
     });
     if (error) {
       console.log(error);
-      alert('Lütfen tekrar deneyin!');
-    } else {
-      setOpen(false);
+      alert("Lütfen tekrar deneyin!");
     }
+    setSubmitting(false);
+  };
+  const showNotification = () => {
+    setOpen(true);
+    setTimeout(function () {
+      setOpen(false);
+    }, 6000);
   };
 
   const pdf = () => {
-    var doc = new jsPDF('l', 'mm', [500, 310]);
+    var doc = new jsPDF("l", "mm", [500, 310]);
     /*doc.autoTable({ html: '#orderTable' })
     doc.save('table.pdf')*/
     /*var elem = document.getElementById("orderTable");
@@ -144,125 +159,149 @@ export default function orderManagement() {
     doc.save("table.pdf");*/
     //doc.autoTable( { html: '#orderTable' })
     doc.autoTable({
-      head: [[
-        "Id",
-        "Sipariş Durumu",
-        "Sipariş Tarihi",
-        "Alıcı Id",
-        "Alıcı Adı",
-        "Alıcı Soyadı",
-        "Alıcı Adresi",
-        "Ürün Id",
-        "Ürün Adı",
-        "Ürün Fiyatı",
-      ]],
-      body: 
-        ordersData
-      
-
-    })
+      head: [
+        [
+          "Id",
+          "Sipariş Durumu",
+          "Sipariş Tarihi",
+          "Alıcı Id",
+          "Alıcı Adı",
+          "Alıcı Soyadı",
+          "Alıcı Adresi",
+          "Ürün Id",
+          "Ürün Adı",
+          "Ürün Fiyatı",
+        ],
+      ],
+      body: ordersData,
+    });
     doc.setFont("times");
 
-    doc.save('table.pdf')
+    doc.save("table.pdf");
 
-/*
+    /*
     const doc = new jsPDF();
     //const { jsPDF } = require("jspdf");
     doc.text("Hello world!", 10, 10);
     doc.save("a4.pdf");*/
   };
-  
-  
 
   return (
     <div>
-            {localStorage.getItem('token') == "" && <Redirect to="/" />}
+      {localStorage.getItem("token") == "" && <Redirect to="/" />}
 
       <GridContainer>
+        <Formik initialValues={initialValues} onSubmit={submitFunction}>
+          {(formik) => (
+            <Form style={{ width: "100%" }}>
+              <GridItem xs={12} sm={12} md={12}>
+                <Card>
+                  <CardHeader color="primary">
+                    <h4 className={classes.cardTitleWhite}>
+                      Sipariş Durumu Güncelle
+                    </h4>
+                    <p className={classes.cardCategoryWhite}>
+                      Formu doldurarak sipariş durumunu güncelleyebilirsiniz.
+                    </p>
+                  </CardHeader>
+                  <CardBody>
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <InputLabel style={{ marginTop: "15px" }}>
+                          {"Sipariş Id"}
+                        </InputLabel>
+                        <Field
+                          className={classes.name}
+                          name="name"
+                          labelText="Sipariş Id"
+                          id="name"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                        />
+                      </GridItem>
+
+                      <GridItem xs={12} sm={12} md={6}>
+                        <FormControl
+                          style={{
+                            width: "100%",
+                            marginTop: "16px",
+                            margin: "27px 0 0 0",
+                          }}
+                          className={classes.formControl}
+                        >
+                          <InputLabel id="order_status">
+                            Sipariş Durumu
+                          </InputLabel>
+                          <Select
+                            labelId="order_status"
+                            id="order_status-select"
+                            value={age}
+                            onChange={handleChange}
+                            name="select"
+                          >
+                            <MenuItem value={"Sipariş Hazırlanıyor"}>
+                              Sipariş Hazırlanıyor
+                            </MenuItem>
+                            <MenuItem value={"Sipariş Yola Çıktı"}>
+                              Sipariş Yola Çıktı
+                            </MenuItem>
+                            <MenuItem value={"Sipariş Teslim Edildi"}>
+                              Sipariş Teslim Edildi
+                            </MenuItem>
+                            <MenuItem value={"Sipariş Teslim Edilemedi"}>
+                              Sipariş Teslim Edilemedi
+                            </MenuItem>
+                          </Select>
+                        </FormControl>
+                      </GridItem>
+                    </GridContainer>
+                  </CardBody>
+                  <CardFooter>
+                    <Button
+                      type="submit"
+                      color="primary"
+                      onClick={() => showNotification()}
+
+                    >
+                      Güncelle
+                    </Button>
+                  </CardFooter>
+                </Card>
+              </GridItem>
+            </Form>
+          )}
+        </Formik>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>
-                Sipariş Durumu Güncelle
-              </h4>
+              <h4 className={classes.cardTitleWhite}>Siparişler</h4>
               <p className={classes.cardCategoryWhite}>
-                Formu doldurarak sipariş durumunu güncelleyebilirsiniz.
+                Sistemde kayıtlı Sipariş bilgileri
               </p>
             </CardHeader>
             <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                  <CustomInput
-                    labelText="Sipariş Id"
-                    id="name"
-                    formControlProps={{
-                      fullWidth: true,
-                    }}
-                  />
-                </GridItem>
-
-                <GridItem xs={12} sm={12} md={6}>
-                  <FormControl
-                    style={{ width: "100%",marginTop: "16px",margin: "27px 0 0 0" }}
-                    className={classes.formControl}
-                  >
-                    <InputLabel id="order_status">Sipariş Durumu</InputLabel>
-                    <Select
-                      labelId="order_status"
-                      id="order_status-select"
-                      value={age}
-                      onChange={handleChange}
-                      name="select"
-                    >
-                      <MenuItem value={"Sipariş Hazırlanıyor"}>Sipariş Hazırlanıyor</MenuItem>
-                      <MenuItem value={"Sipariş Yola Çıktı"}>Sipariş Kargoya Verildi</MenuItem>
-                      <MenuItem value={"Sipariş Teslim Edildi"}>Sipariş Teslim Edildi</MenuItem>
-                      <MenuItem value={"Sipariş Teslim Edilemedi"}>Sipariş Teslim Edilemedi</MenuItem>
-                    </Select>
-                  </FormControl>
-                </GridItem>
-              </GridContainer>
+              <Button onClick={pdf}>Verileri İndir</Button>
+              <Table
+                id="orderTable"
+                tableHeaderColor="primary"
+                tableHead={[
+                  "Id",
+                  "Sipariş Durumu",
+                  "Sipariş Tarihi",
+                  "Alıcı Id",
+                  "Alıcı Adı",
+                  "Alıcı Soyadı",
+                  "Alıcı Adresi",
+                  "Ürün Id",
+                  "Ürün Adı",
+                  "Ürün Fiyatı",
+                ]}
+                tableData={ordersData}
+              />
             </CardBody>
-            <CardFooter>
-              <Button onClick={submitFunction} color="primary">Güncelle</Button>
-            </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Siparişler</h4>
-            <p className={classes.cardCategoryWhite}>
-              Sistemde kayıtlı Sipariş bilgileri
-            </p>
-          </CardHeader>
-          <CardBody>
-            <Button onClick={pdf}>Verileri İndir</Button>
-            <Table id="orderTable"
-              tableHeaderColor="primary"
-              tableHead={[
-                "Id",
-                "Sipariş Durumu",
-                "Sipariş Tarihi",
-                "Alıcı Id",
-                "Alıcı Adı",
-                "Alıcı Soyadı",
-                "Alıcı Adresi",
-                "Ürün Id",
-                "Ürün Adı",
-                "Ürün Fiyatı",
-              ]}
-              tableData={
-                ordersData
-                
-              }
-            />
-
-           
-          </CardBody>
-        </Card>
-      </GridItem>
-       
       </GridContainer>
     </div>
   );
