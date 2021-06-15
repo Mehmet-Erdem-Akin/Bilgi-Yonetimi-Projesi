@@ -26,7 +26,6 @@ import Unarchive from "@material-ui/icons/Unarchive";
 import Language from "@material-ui/icons/Language";
 // core components/views for Admin layout
 import DashboardPage from "views/Dashboard/Dashboard.js";
-import UserProfile from "views/UserProfile/UserProfile.js";
 import ProductManagement from "views/ProductManagement/ProductManagement.js";
 import OrderManagement from "views/OrderManagement/OrderManagement.js";
 
@@ -45,14 +44,7 @@ const dashboardRoutes = [{
         component: DashboardPage,
         layout: "/admin"
     },
-    {
-        path: "/user",
-        name: "User Profile",
-        rtlName: "ملف تعريفي للمستخدم",
-        icon: Person,
-        component: UserProfile,
-        layout: "/admin"
-    },
+    
     {
         path: "/product-management",
         name: "Product Management",

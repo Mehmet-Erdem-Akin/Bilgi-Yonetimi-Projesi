@@ -34,10 +34,11 @@ const landingPageStyle = {
     //backgroundColor: '#ccc',
     height: 'auto',
 
-
   },
   profileBg: {
     backgroundColor: '#0B0310',
+    height: '100%',
+
   },
  
   title: {
@@ -58,6 +59,7 @@ const landingPageStyle = {
     background: "#FFFFFF",
     position: "relative",
     zIndex: "3",
+    
   },
   mainRaised: {
     margin: "-60px 30px 0px",

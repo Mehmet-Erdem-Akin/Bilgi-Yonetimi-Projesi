@@ -20,6 +20,7 @@ import styles from "assets/jss/material-kit-react/views/landingPage.js";
 import { gql, useQuery } from "@apollo/client";
 import Table from "components/Table/Table.js";
 import { Link, Redirect } from "react-router-dom";
+import user from "assets/img/user.png";
 
 const MY_PROFİLE = gql`
   query getUserPublicProfile($id: ID!) {
@@ -135,13 +136,13 @@ export default function LandingProfile(props) {
   ]);*/
 
   return (
-    <div className={classes.profileBg}>
+    <div  className={classes.profileBg}>
       {localStorage.getItem("token") == "" && <Redirect to="/" />}
 
       <Header
         color="transparent"
         routes={dashboardRoutes}
-        brand="Getir"
+        brand="Semt Pazarı"
         rightLinks={<HeaderLinks />}
         fixed
         changeColorOnScroll={{
@@ -150,9 +151,9 @@ export default function LandingProfile(props) {
         }}
         {...rest}
       />
-      <div className={classes.profile}>
-        <GridContainer>
-          <GridItem xs={12} sm={12} md={8}>
+      <div style={{paddingTop: "100px",position: "relative"}} className={classes.profile}>
+        <GridContainer >
+          {/* <GridItem xs={12} sm={12} md={8}>
             <Card className={classes.profileMain}>
               <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>Edit Profile</h4>
@@ -258,20 +259,20 @@ export default function LandingProfile(props) {
                         rows: 5,
                       }}
                     />
-                  </GridItem>
+                  </GridItem> 
                 </GridContainer>
               </CardBody>
               <CardFooter>
                 <Button color="primary">Update Profile</Button>
               </CardFooter>
             </Card>
-          </GridItem>
+          </GridItem>*/}
 
           <GridItem xs={12} sm={12} md={4}>
             <Card profile className={classes.profileMain}>
               <CardAvatar profile>
                 <a href="#pablo" onClick={(e) => e.preventDefault()}>
-                  <img src={avatar} alt="..." />
+                  <img src={user} alt="..." />
                 </a>
               </CardAvatar>
               <CardBody profile>
@@ -303,7 +304,7 @@ export default function LandingProfile(props) {
             </Card>
           </GridItem>
 
-          <GridItem xs={12} sm={12} md={12}>
+          <GridItem xs={12} sm={12} md={8}>
             <Card>
               <CardHeader color="primary">
                 <h4 className={classes.cardTitleWhite}>Siparişlerin</h4>

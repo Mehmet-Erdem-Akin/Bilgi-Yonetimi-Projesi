@@ -341,22 +341,7 @@ export default function Dashboard() {
             </CardFooter>
           </Card>
         </GridItem>
-        <GridItem xs={12} sm={6} md={6}>
-          <Card>
-            <CardHeader color="info" stats icon>
-              <CardIcon color="info">
-                <MonetizationOnIcon/>
-              </CardIcon>
-              <p className={classes.cardCategory}>Hasılat</p>
-              <h3 className={classes.cardTitle}>100</h3>
-            </CardHeader>
-            <CardFooter stats>
-              <div className={classes.stats}>
-                Sipariş edilen ürünlerin toplam fiyatı
-                              </div>
-            </CardFooter>
-          </Card>
-        </GridItem>
+       
         
       </GridContainer>
       

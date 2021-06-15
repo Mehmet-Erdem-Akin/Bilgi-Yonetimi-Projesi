@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from "react";
+import React, { useState, useEffect } from "react";
 // @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
 import InputLabel from "@material-ui/core/InputLabel";
@@ -13,39 +13,38 @@ import CardAvatar from "components/Card/CardAvatar.js";
 import CardBody from "components/Card/CardBody.js";
 import CardFooter from "components/Card/CardFooter.js";
 import Table from "components/Table/Table.js";
-import { Link, Redirect } from 'react-router-dom';
-import { Field, Form, Formik } from 'formik';
-import TextField from '@material-ui/core/TextField';
+import { Link, Redirect } from "react-router-dom";
+import { Field, Form, Formik } from "formik";
+import TextField from "@material-ui/core/TextField";
 import AddAlert from "@material-ui/icons/AddAlert";
+import MenuItem from "@material-ui/core/MenuItem";
+import FormControl from "@material-ui/core/FormControl";
+import Select from "@material-ui/core/Select";
 //core components
 import Snackbar from "components/Snackbar/Snackbar.js";
 import avatar from "assets/img/faces/default.jpg";
-import { gql, useQuery , useMutation} from "@apollo/client";
+import { gql, useQuery, useMutation } from "@apollo/client";
 
 import { jsPDF } from "jspdf";
 //import 'jspdf-autotable';
-import autoTable from 'jspdf-autotable';
+import autoTable from "jspdf-autotable";
 
 const CREATE_PRODUCT = gql`
   mutation createProduct(
     $name: String!
     $description: String!
     $price: String!
-    
+    $image: String!
   ) {
-    createProduct(
-    name: $name
-    description: $description
-    price: $price
-    ){
+    createProduct(name: $name, description: $description, price: $price, image: $image) {
       id
       name
       description
       price
+      image
     }
   }
 `;
-
 
 const GET_PRODUCTS = gql`
   query getProducts {
@@ -54,18 +53,17 @@ const GET_PRODUCTS = gql`
       name
       description
       price
-      
     }
   }
 `;
- 
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
     margin: "0",
     fontSize: "14px",
     marginTop: "0",
-    marginBottom: "0"
+    marginBottom: "0",
   },
   cardTitleWhite: {
     color: "#FFFFFF",
@@ -74,23 +72,23 @@ const styles = {
     fontWeight: "300",
     fontFamily: "'Roboto', 'Helvetica', 'Arial', sans-serif",
     marginBottom: "3px",
-    textDecoration: "none"
+    textDecoration: "none",
   },
   name: {
-    marginTop: '5px',
-    marginBottom: '25px',
-    width: '99%',
+    marginTop: "5px",
+    marginBottom: "25px",
+    width: "99%",
     //padding: '10px',
-    border: '1px solid #ccc',
-    borderRadius: '2px',
+    border: "1px solid #ccc",
+    borderRadius: "2px",
     fontSize: "14px",
     fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
     fontWeight: "400",
-    height: '35px',
+    height: "35px",
   },
-  name2:{
-    height: '150px'
-  }
+  name2: {
+    height: "150px",
+  },
 };
 
 const useStyles = makeStyles(styles);
@@ -100,17 +98,24 @@ export default function productManagement() {
   //const [open, setOpen] = React.useState(false);
   const [adet, adediAta] = useState();
   const [open, setOpen] = React.useState(false);
+  /*const [pictures, setPictures] = useState([]);*/
+  const [age, setAge] = React.useState('');
 
+  const handleChange = (event) => {
+    setAge(event.target.value);
+  };
+  const onDrop = (picture) => {
+    setPictures([...pictures, picture]);
+  };
   const [createProduct] = useMutation(CREATE_PRODUCT, {
     refetchQueries: [{ query: GET_PRODUCTS }],
   });
 
- const initialValues = {
-    name: '',
-    description: '',
-    //image: '',
-    price: '',
-    
+  const initialValues = {
+    name: "",
+    description: "",
+    image: "",
+    price: "",
   };
 
   const {
@@ -119,7 +124,6 @@ export default function productManagement() {
     data: productData,
   } = useQuery(GET_PRODUCTS);
 
-  
   if (productLoading) return "Loading...";
   if (productError) return `Error! ${error.message}`;
 
@@ -130,32 +134,31 @@ export default function productManagement() {
     item.price,
   ]);
 
-  const submitFunction = async (values,{ setSubmitting }) => {
-    const { error, data } =await createProduct({
+  const submitFunction = async (values, { setSubmitting }) => {
+    const { error, data } = await createProduct({
       variables: {
-        name: values.name || '',
-        description: values.description || '',
-        //image: values.image || '',
-        price: values.price || '',
-       
+        name: values.name || "",
+        description: values.description || "",
+        image: age || '',
+        price: values.price || "",
       },
     });
-    
+
     if (error) {
       console.log(error);
-      alert('Lütfen tekrar deneyin!');
-    } 
+      alert("Lütfen tekrar deneyin!");
+    }
     setSubmitting(false);
   };
   const showNotification = () => {
     setOpen(true);
-    setTimeout(function() {
+    setTimeout(function () {
       setOpen(false);
     }, 6000);
-  }
+  };
 
   const pdf = () => {
-    var doc = new jsPDF('l', 'mm', [500, 310]);
+    var doc = new jsPDF("l", "mm", [500, 310]);
     /*doc.autoTable({ html: '#orderTable' })
     doc.save('table.pdf')*/
     /*var elem = document.getElementById("orderTable");
@@ -164,152 +167,157 @@ export default function productManagement() {
     doc.save("table.pdf");*/
     //doc.autoTable( { html: '#orderTable' })
     doc.autoTable({
-      head: [[
-        "Id",
-        "Ürün Adı",
-        "Açıklama",
-        "Fiyat",
-      ]],
-      body: 
-        productsData
-      
-
-    })
+      head: [["Id", "Ürün Adı", "Açıklama", "Fiyat"]],
+      body: productsData,
+    });
     doc.setFont("times");
 
-    doc.save('table.pdf')
+    doc.save("table.pdf");
 
-/*
+    /*
     const doc = new jsPDF();
     //const { jsPDF } = require("jspdf");
     doc.text("Hello world!", 10, 10);
     doc.save("a4.pdf");*/
   };
 
+  const names = [
+    'elma',
+    'armut',
+    'muz',
+    'ananas',
+    'çilek',
+    'kiraz',
+    'avakado',
+    'karpuz',
+    'portakal',
+    'diger',
+  ];
+
   return (
     <div>
-            {localStorage.getItem('token') == "" && <Redirect to="/" />}
+      {localStorage.getItem("token") == "" && <Redirect to="/" />}
 
       <GridContainer>
-       <Formik  initialValues={initialValues}   onSubmit={submitFunction}>
-         {(formik) => (
-        <Form style={{width: '100%'}}>
-        <GridItem xs={12} sm={12} md={12}>
-        
-          <Card>
-            <CardHeader color="primary">
-              <h4 className={classes.cardTitleWhite}>Ürün Oluştur</h4>
-              <p className={classes.cardCategoryWhite}>Formu doldurarak sisteme ürün kaydı oluşturun.</p>
-            </CardHeader>
-            <CardBody>
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={6}>
-                <InputLabel
-                  
-                >
-                  {'Ürün Adı'}
-                </InputLabel>
-                  <Field 
-                    className={classes.name}
-                    name="name"
-                    labelText="Ürün Adı"
-                    id="name"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                   
-                  />
-                </GridItem>
-                
-                <GridItem xs={12} sm={12} md={6}>
-                <InputLabel
-                  
-                  >
-                    {'Ürün Fiyatı'}
-                  </InputLabel>
-                  <Field
-                    className={classes.name}
-                    name="price"
-                    labelText="Ürün Fiyatı"
-                    id="price"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                  />
-                </GridItem>
-              </GridContainer>
-              
-              <GridContainer>
-                <GridItem xs={12} sm={12} md={12}>
-                <InputLabel
-                  
-                  >
-                    {'Ürün Açıklaması'}
-                  </InputLabel>
-                  <Field
-                    className={classes.name+ " " + classes.name2}
-                    name="description"
-                    labelText="Ürün Açıklaması"
-                    id="description"
-                    formControlProps={{
-                      fullWidth: true
-                    }}
-                    
-                  />
-                </GridItem>
-              </GridContainer>
+        <Formik initialValues={initialValues} onSubmit={submitFunction}>
+          {(formik) => (
+            <Form style={{ width: "100%" }}>
+              <GridItem xs={12} sm={12} md={12}>
+                <Card>
+                  <CardHeader color="primary">
+                    <h4 className={classes.cardTitleWhite}>Ürün Oluştur</h4>
+                    <p className={classes.cardCategoryWhite}>
+                      Formu doldurarak sisteme ürün kaydı oluşturun.
+                    </p>
+                  </CardHeader>
+                  <CardBody>
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <InputLabel>{"Ürün Adı"}</InputLabel>
+                        <Field
+                          className={classes.name}
+                          name="name"
+                          labelText="Ürün Adı"
+                          id="name"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                        />
+                      </GridItem>
 
-              
-            </CardBody>
-            <CardFooter>
-              <Button color="primary" onClick={() => showNotification()}  type="submit" disabled={formik.isSubmitting}>Ekle</Button>
-            </CardFooter>
-          </Card>
-          <Snackbar
-              place="bc"
-              color="success"
-              icon={AddAlert}
-              message="Ürün Başarıyla Kaydedilmiştir."
-              open={open}
-              closeNotification={() => setOpen(false)}
-              close
-            />
-        </GridItem>
-       </Form>
-         )}
+                      <GridItem xs={12} sm={12} md={6}>
+                        <InputLabel>{"Ürün Fiyatı"}</InputLabel>
+                        <Field
+                          className={classes.name}
+                          name="price"
+                          labelText="Ürün Fiyatı"
+                          id="price"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                        />
+                      </GridItem>
+                    </GridContainer>
+
+                    <GridContainer>
+                      <GridItem xs={12} sm={12} md={6}>
+                        <InputLabel>{"Ürün Açıklaması"}</InputLabel>
+                        <Field
+                          className={classes.name + " " + classes.name2}
+                          name="description"
+                          labelText="Ürün Açıklaması"
+                          id="description"
+                          formControlProps={{
+                            fullWidth: true,
+                          }}
+                        />
+                      </GridItem>
+                   
+                      <GridItem xs={12} sm={12} md={6}>
+                        <FormControl style={{width: "100%"}} className={classes.formControl}>
+                          <InputLabel id="demo-simple-select-label">
+                            Ürün Görseli
+                          </InputLabel>
+                          <Select
+                            labelId="demo-simple-select-label"
+                            id="demo-simple-select"
+                            name="image"
+                            value={age}
+                            onChange={handleChange}
+                          >
+                            {names.map((name) => (
+                             <MenuItem value={name}>{name}</MenuItem>
+                             ))}
+                            
+                          </Select>
+                        </FormControl>
+                      </GridItem>
+                    </GridContainer> 
+                  </CardBody>
+                  <CardFooter>
+                    <Button
+                      color="primary"
+                      onClick={() => showNotification()}
+                      type="submit"
+                      disabled={formik.isSubmitting}
+                    >
+                      Ekle
+                    </Button>
+                  </CardFooter>
+                </Card>
+                <Snackbar
+                  place="bc"
+                  color="success"
+                  icon={AddAlert}
+                  message="Ürün Başarıyla Kaydedilmiştir."
+                  open={open}
+                  closeNotification={() => setOpen(false)}
+                  close
+                />
+              </GridItem>
+            </Form>
+          )}
         </Formik>
 
         <GridItem xs={12} sm={12} md={12}>
-        <Card>
-          <CardHeader color="primary">
-            <h4 className={classes.cardTitleWhite}>Ürünler</h4>
-            <p className={classes.cardCategoryWhite}>
-              Sistemde kayıtlı ürün bilgileri
-            </p>
-          </CardHeader>
-          <CardBody>
-          <Button onClick={pdf}>Verileri İndir</Button>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={classes.cardTitleWhite}>Ürünler</h4>
+              <p className={classes.cardCategoryWhite}>
+                Sistemde kayıtlı ürün bilgileri
+              </p>
+            </CardHeader>
+            <CardBody>
+              <Button onClick={pdf}>Verileri İndir</Button>
 
-            <Table
-              tableHeaderColor="primary"
-              tableHead={[
-                "Id",
-                "Ürün Adı",
-                "Açıklama",
-                "Fiyat",
-              ]}
-              tableData={
-                productsData
-                
-              }
-            />
-
-           
-          </CardBody>
-        </Card>
-       
-      </GridItem>
-       
+              <Table
+                tableHeaderColor="primary"
+                tableHead={["Id", "Ürün Adı", "Açıklama", "Fiyat"]}
+                tableData={productsData}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
       </GridContainer>
     </div>
   );

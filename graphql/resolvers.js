@@ -211,7 +211,7 @@ module.exports = {
 
         },
         createProduct: async (_, args) => {
-            let { name, description, price, /*image*/ } = args
+            let { name, description, price, image } = args
             let errors = {}
             try {
 
@@ -219,7 +219,7 @@ module.exports = {
                     name,
                     description,
                     price,
-                    //image
+                    image
                 })
                 return product
 

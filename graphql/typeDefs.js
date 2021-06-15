@@ -57,6 +57,7 @@ module.exports = gql `
       name: String!
       description: String!
       price: String!
+      image: String!
     ):Product!
 
     createOrder(
