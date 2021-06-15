@@ -217,7 +217,7 @@ export default function orderManagement() {
                       <MenuItem value={"Sipariş Hazırlanıyor"}>Sipariş Hazırlanıyor</MenuItem>
                       <MenuItem value={"Sipariş Yola Çıktı"}>Sipariş Kargoya Verildi</MenuItem>
                       <MenuItem value={"Sipariş Teslim Edildi"}>Sipariş Teslim Edildi</MenuItem>
-                      <MenuItem value={"Sipariş Teslim Edilemedi"}>Sipariş Teslim Edildi</MenuItem>
+                      <MenuItem value={"Sipariş Teslim Edilemedi"}>Sipariş Teslim Edilemedi</MenuItem>
                     </Select>
                   </FormControl>
                 </GridItem>
