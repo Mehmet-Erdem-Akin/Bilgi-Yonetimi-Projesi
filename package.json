@@ -33,5 +33,4 @@
     "nodemon": "^2.0.7",
     "sequelize-cli": "^6.2.0"
   }
-
 }
