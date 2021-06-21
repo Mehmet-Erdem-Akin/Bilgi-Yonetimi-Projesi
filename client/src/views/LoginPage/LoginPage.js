@@ -24,7 +24,7 @@ import TextField from '@material-ui/core/TextField';
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
-import image from "assets/img/bg7.jpg";
+import image from "assets/img/pazar1.jpg";
 
 import { gql, useLazyQuery } from "@apollo/client";
 
@@ -98,7 +98,7 @@ export default function LoginPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form} onSubmit={submitLoginForm}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4 className={classes.h4}>Login</h4>
+                    <h4 className={classes.h4}>Login to Semt Pazarı</h4>
                   </CardHeader>
 
                   <Link to={{ pathname: "/register-page" }}>

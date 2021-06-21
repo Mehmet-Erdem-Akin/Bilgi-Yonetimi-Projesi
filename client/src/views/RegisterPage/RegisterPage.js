@@ -22,7 +22,7 @@ import TextField from "@material-ui/core/TextField";
 
 import styles from "assets/jss/material-kit-react/views/loginPage.js";
 
-import image from "assets/img/bg7.jpg";
+import image from "assets/img/pazar1.jpg";
 import Radio from "@material-ui/core/Radio";
 import FiberManualRecord from "@material-ui/icons/FiberManualRecord";
 
@@ -125,7 +125,7 @@ export default function RegisterPage(props) {
               <Card className={classes[cardAnimaton]}>
                 <form className={classes.form} onSubmit={submitRegisterForm}>
                   <CardHeader color="primary" className={classes.cardHeader}>
-                    <h4 className={classes.h4}>Register</h4>
+                    <h4 className={classes.h4}>Register to Semt Pazarı</h4>
                   </CardHeader>
                   <Link to={{ pathname: "/login-page" }}>
                     <p className={classes.divider}>Or Login</p>
